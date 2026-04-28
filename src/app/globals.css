@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+  }
+
+  body {
+    @apply bg-zinc-950 text-zinc-200 antialiased;
+    font-family: 'Inter', ui-sans-serif, -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  }
+
+  /* 自定义滚动条 */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+@layer components {
+  .zj-card {
+    @apply bg-white/5 border border-white/10 rounded-2xl shadow-zj;
+  }
+  .zj-button {
+    @apply px-6 py-3 rounded-xl font-medium transition-all duration-200 ease-out;
+  }
+  .zj-button-primary {
+    @apply zj-button bg-zj-blue text-white hover:bg-zj-blue/90 hover:-translate-y-[1px] hover:shadow-lg;
+  }
+  .zj-button-secondary {
+    @apply zj-button bg-white/10 text-zinc-200 border border-white/10 hover:bg-white/15 hover:-translate-y-[1px];
+  }
+  .zj-input {
+    @apply w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-zj-blue/50 focus:ring-1 focus:ring-zj-blue/30 transition-all duration-200;
+  }
+}
