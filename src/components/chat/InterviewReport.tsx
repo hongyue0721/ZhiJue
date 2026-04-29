@@ -9,30 +9,33 @@ interface InterviewReportProps {
 export default function InterviewReport({ report }: InterviewReportProps) {
   if (!report) {
     return (
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-5 text-sm leading-7 text-zinc-500">
+      <div className="rounded-notion-md border border-notion-border bg-notion-surface p-4 text-notion-sm leading-7 text-notion-text-tertiary">
         暂无面试复盘。完成模拟面试后，这里会显示整体评分、六维雷达图和改进建议。
       </div>
     )
   }
 
   return (
-    <div className="space-y-4 rounded-2xl border border-white/10 bg-white/5 p-5 text-sm leading-7 text-zinc-300">
+    <div className="space-y-4 rounded-notion-md border border-notion-border bg-notion-surface p-4 text-notion-sm leading-7 text-notion-text-secondary">
       <div>
-        <p className="text-xs uppercase tracking-[0.28em] text-zinc-500">整体评分</p>
-        <p className="mt-2 text-3xl font-semibold text-zinc-100">{report.overallScore}</p>
+        <p className="text-notion-xs uppercase tracking-[0.2em] text-notion-text-tertiary font-medium">整体评分</p>
+        <p className="mt-1 text-notion-2xl font-bold text-notion-accent">{report.overallScore}</p>
       </div>
 
       <div>
-        <p className="text-xs uppercase tracking-[0.28em] text-zinc-500">总体总结</p>
-        <p className="mt-2 text-zinc-200">{report.summary}</p>
+        <p className="text-notion-xs uppercase tracking-[0.2em] text-notion-text-tertiary font-medium">总体总结</p>
+        <p className="mt-1 text-notion-text">{report.summary}</p>
       </div>
 
       {report.strengths.length > 0 ? (
         <div>
-          <p className="text-xs uppercase tracking-[0.28em] text-zinc-500">优势</p>
-          <ul className="mt-2 space-y-1 text-zinc-300">
+          <p className="text-notion-xs uppercase tracking-[0.2em] text-notion-text-tertiary font-medium">优势</p>
+          <ul className="mt-1 space-y-1">
             {report.strengths.map((item) => (
-              <li key={item}>- {item}</li>
+              <li key={item} className="text-notion-text-secondary flex items-start gap-1.5">
+                <span className="text-notion-green mt-0.5">+</span>
+                {item}
+              </li>
             ))}
           </ul>
         </div>
@@ -40,10 +43,13 @@ export default function InterviewReport({ report }: InterviewReportProps) {
 
       {report.improvements.length > 0 ? (
         <div>
-          <p className="text-xs uppercase tracking-[0.28em] text-zinc-500">待改进</p>
-          <ul className="mt-2 space-y-1 text-zinc-300">
+          <p className="text-notion-xs uppercase tracking-[0.2em] text-notion-text-tertiary font-medium">待改进</p>
+          <ul className="mt-1 space-y-1">
             {report.improvements.map((item) => (
-              <li key={item}>- {item}</li>
+              <li key={item} className="text-notion-text-secondary flex items-start gap-1.5">
+                <span className="text-notion-red mt-0.5">-</span>
+                {item}
+              </li>
             ))}
           </ul>
         </div>

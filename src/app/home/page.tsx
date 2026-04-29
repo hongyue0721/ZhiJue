@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Compass, FileText, Mic, ArrowRight, Sparkles, Clock, ChevronRight, Trash2, ArrowLeft } from 'lucide-react'
+import { Compass, FileText, Mic, ArrowRight, Clock, ChevronRight, Trash2, ArrowLeft, Sparkles } from 'lucide-react'
 import type { ChatSession } from '@/types/chat'
 import { toast } from 'sonner'
 
@@ -12,22 +12,16 @@ const features = [
     icon: Compass,
     title: '职业探索',
     description: 'AI 深度对话，发现你的职业方向',
-    color: 'from-blue-500/20 to-blue-600/10',
-    borderColor: 'border-blue-500/20',
   },
   {
     icon: FileText,
     title: '简历生成',
     description: '智能优化，一键生成专业简历',
-    color: 'from-emerald-500/20 to-emerald-600/10',
-    borderColor: 'border-emerald-500/20',
   },
   {
     icon: Mic,
     title: '模拟面试',
     description: 'AI 面试官实战演练 + 详细复盘',
-    color: 'from-amber-500/20 to-amber-600/10',
-    borderColor: 'border-amber-500/20',
   },
 ]
 
@@ -69,23 +63,22 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col">
-      {/* Header */}
+    <div className="min-h-screen bg-notion-bg flex flex-col">
       <header className="px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           {showHistory ? (
             <button
-              className="p-2 text-zinc-400 hover:text-zinc-200 transition-colors"
+              className="p-1.5 text-notion-text-secondary hover:text-notion-text transition-colors rounded-notion hover:bg-notion-hover"
               onClick={() => setShowHistory(false)}
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
           ) : (
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-zj-blue to-zj-purple flex items-center justify-center">
-              <span className="text-lg font-bold text-white">觉</span>
+            <div className="w-9 h-9 rounded-notion bg-notion-accent flex items-center justify-center">
+              <span className="text-base font-bold text-notion-bg">觉</span>
             </div>
           )}
-          <span className="text-lg font-semibold text-zinc-100">
+          <span className="text-base font-semibold text-notion-text">
             {showHistory ? '历史记录' : '职觉'}
           </span>
         </div>
@@ -93,19 +86,18 @@ export default function HomePage() {
 
       <AnimatePresence mode="wait">
         {showHistory ? (
-          /* History View */
           <motion.main
             key="history"
             className="flex-1 px-6 pb-12 overflow-y-auto"
-            initial={{ opacity: 0, x: 80 }}
+            initial={{ opacity: 0, x: 60 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -80 }}
-            transition={{ duration: 0.25 }}
+            exit={{ opacity: 0, x: -60 }}
+            transition={{ duration: 0.2 }}
           >
-            <div className="max-w-3xl mx-auto pt-4">
+            <div className="max-w-2xl mx-auto pt-4">
               {sessions.length === 0 ? (
                 <div className="text-center py-20">
-                  <p className="text-zinc-500 mb-4">暂无历史记录</p>
+                  <p className="text-notion-text-tertiary mb-6 text-notion-sm">暂无历史记录</p>
                   <button
                     className="zj-button-primary"
                     onClick={() => {
@@ -117,22 +109,22 @@ export default function HomePage() {
                   </button>
                 </div>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-1">
                   {sessions.map((session) => (
                     <div
                       key={session.id}
-                      className="zj-card p-4 group hover:-translate-y-[1px] transition-all duration-200 flex items-center justify-between cursor-pointer"
+                      className="group flex items-center justify-between px-3 py-3 rounded-notion cursor-pointer hover:bg-notion-hover transition-colors duration-100"
                       onClick={() => router.push(`/chat?session=${session.id}`)}
                     >
                       <div className="flex items-center gap-3 min-w-0 flex-1">
-                        <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
-                          <FileText className="w-5 h-5 text-zinc-400" />
+                        <div className="w-8 h-8 rounded-notion flex items-center justify-center flex-shrink-0 text-notion-text-tertiary">
+                          <FileText className="w-4 h-4" />
                         </div>
                         <div className="min-w-0">
-                          <p className="text-sm text-zinc-200 font-medium truncate">
+                          <p className="text-notion-sm text-notion-text truncate">
                             {session.title || '求职旅程'}
                           </p>
-                          <p className="text-xs text-zinc-500">
+                          <p className="text-notion-xs text-notion-text-tertiary mt-0.5">
                             {new Date(session.updatedAt).toLocaleDateString('zh-CN', {
                               year: 'numeric',
                               month: 'long',
@@ -145,12 +137,12 @@ export default function HomePage() {
                       <div className="flex items-center gap-1 flex-shrink-0">
                         <button
                           onClick={(e) => void handleDeleteSession(e, session.id)}
-                          className="opacity-0 group-hover:opacity-100 p-2 text-zinc-500 hover:text-red-400 transition-all rounded-lg hover:bg-white/5"
+                          className="opacity-0 group-hover:opacity-100 p-1.5 text-notion-text-tertiary hover:text-notion-red transition-all rounded-notion hover:bg-notion-surface"
                           title="删除对话"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
-                        <ChevronRight className="w-4 h-4 text-zinc-600 group-hover:text-zinc-400 transition-colors" />
+                        <ChevronRight className="w-4 h-4 text-notion-text-tertiary group-hover:text-notion-text-secondary transition-colors" />
                       </div>
                     </div>
                   ))}
@@ -159,44 +151,41 @@ export default function HomePage() {
             </div>
           </motion.main>
         ) : (
-          /* Main Hero View */
           <motion.main
             key="hero"
             className="flex-1 flex flex-col items-center justify-center px-6 pb-12"
-            initial={{ opacity: 0, x: -80 }}
+            initial={{ opacity: 0, x: -60 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 80 }}
-            transition={{ duration: 0.25 }}
+            exit={{ opacity: 0, x: 60 }}
+            transition={{ duration: 0.2 }}
           >
-            <div className="text-center max-w-2xl mx-auto">
+            <div className="text-center max-w-xl mx-auto">
               <motion.div
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-zinc-400 mb-8"
-                initial={{ opacity: 0, y: 20 }}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-notion-border text-notion-xs text-notion-text-secondary mb-8"
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
+                transition={{ delay: 0.05 }}
               >
-                <Sparkles className="w-4 h-4 text-zj-sand" />
+                <Sparkles className="w-3.5 h-3.5 text-notion-accent" />
                 <span>AI 驱动的求职全流程助手</span>
               </motion.div>
 
               <motion.h1
-                className="text-4xl md:text-5xl font-bold text-zinc-100 mb-4 leading-tight"
-                initial={{ opacity: 0, y: 20 }}
+                className="text-notion-3xl font-bold text-notion-text mb-3 leading-tight tracking-tight"
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 }}
+                transition={{ delay: 0.1 }}
               >
                 让 AI 成为你的
                 <br />
-                <span className="bg-gradient-to-r from-zj-blue to-zj-purple bg-clip-text text-transparent">
-                  求职旅伴
-                </span>
+                <span className="text-notion-accent">求职旅伴</span>
               </motion.h1>
 
               <motion.p
-                className="text-lg text-zinc-400 mb-12 leading-relaxed"
-                initial={{ opacity: 0, y: 20 }}
+                className="text-notion-base text-notion-text-secondary mb-10 leading-relaxed"
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
+                transition={{ delay: 0.15 }}
               >
                 从职业探索到简历生成，再到模拟面试
                 <br />
@@ -204,52 +193,48 @@ export default function HomePage() {
               </motion.p>
             </div>
 
-            {/* Feature Cards */}
             <motion.div
-              className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl w-full mb-12"
-              initial={{ opacity: 0, y: 20 }}
+              className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-3xl w-full mb-10"
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25 }}
+              transition={{ delay: 0.2 }}
             >
               {features.map((feature, index) => (
                 <motion.div
                   key={feature.title}
-                  className={`zj-card p-6 ${feature.borderColor}`}
-                  initial={{ opacity: 0, y: 20 }}
+                  className="zj-card p-5 hover:bg-notion-hover transition-colors duration-150"
+                  initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 + index * 0.08 }}
+                  transition={{ delay: 0.25 + index * 0.05 }}
                 >
-                  <div
-                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4`}
-                  >
-                    <feature.icon className="w-6 h-6 text-zinc-200" />
+                  <div className="w-9 h-9 rounded-notion bg-notion-hover flex items-center justify-center mb-3">
+                    <feature.icon className="w-4.5 h-4.5 text-notion-accent" />
                   </div>
-                  <h3 className="text-lg font-semibold text-zinc-100 mb-2">{feature.title}</h3>
-                  <p className="text-sm text-zinc-400 leading-relaxed">{feature.description}</p>
+                  <h3 className="text-notion-sm font-semibold text-notion-text mb-1">{feature.title}</h3>
+                  <p className="text-notion-xs text-notion-text-secondary leading-relaxed">{feature.description}</p>
                 </motion.div>
               ))}
             </motion.div>
 
-            {/* Buttons */}
             <motion.div
-              className="flex items-center gap-4"
-              initial={{ opacity: 0, y: 20 }}
+              className="flex items-center gap-3"
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.45 }}
+              transition={{ delay: 0.4 }}
             >
               <button
-                className="zj-button-primary flex items-center gap-2 text-lg px-8 py-4"
+                className="zj-button-primary flex items-center gap-2 text-notion-base px-6 py-2.5"
                 onClick={() => router.push('/chat')}
               >
                 开始探索
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className="w-4 h-4" />
               </button>
               {sessions.length > 0 && (
                 <button
-                  className="zj-button-secondary flex items-center gap-2 text-lg px-8 py-4"
+                  className="zj-button-secondary flex items-center gap-2 text-notion-base px-6 py-2.5"
                   onClick={() => setShowHistory(true)}
                 >
-                  <Clock className="w-5 h-5" />
+                  <Clock className="w-4 h-4" />
                   历史回顾
                 </button>
               )}
@@ -258,9 +243,8 @@ export default function HomePage() {
         )}
       </AnimatePresence>
 
-      {/* Footer */}
-      <footer className="px-6 py-4 text-center text-sm text-zinc-500">
-        职觉 ZhiJue &copy; 2026 &mdash; AI 求职旅伴
+      <footer className="px-6 py-4 text-center text-notion-xs text-notion-text-tertiary">
+        职觉 ZhiJue &copy; 2026
       </footer>
     </div>
   )

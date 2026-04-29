@@ -36,8 +36,8 @@ export default function InputBox({ onSend, disabled, placeholder }: InputBoxProp
   }
 
   return (
-    <div className="px-4 pb-4 pt-2">
-      <div className="max-w-3xl mx-auto flex items-end gap-3 bg-white/5 border border-white/10 rounded-2xl px-4 py-3">
+    <div className="px-4 pb-3 pt-2">
+      <div className="max-w-3xl mx-auto flex items-end gap-2 bg-notion-surface border border-notion-border rounded-notion-md px-3 py-2.5">
         <textarea
           ref={textareaRef}
           value={input}
@@ -46,22 +46,22 @@ export default function InputBox({ onSend, disabled, placeholder }: InputBoxProp
           placeholder={placeholder || '输入你的消息...'}
           disabled={disabled}
           rows={1}
-          className="flex-1 bg-transparent text-zinc-200 placeholder-zinc-500 resize-none focus:outline-none text-base leading-relaxed max-h-[200px]"
+          className="flex-1 bg-transparent text-notion-text placeholder-notion-text-tertiary resize-none focus:outline-none text-notion-sm leading-relaxed max-h-[200px]"
         />
         <button
           onClick={() => void handleSend()}
           disabled={disabled || !input.trim()}
           className={cn(
-            'p-2 rounded-xl transition-all duration-200',
+            'p-1.5 rounded-notion transition-all duration-150',
             input.trim() && !disabled
-              ? 'bg-zj-blue text-white hover:bg-zj-blue/90'
-              : 'bg-white/5 text-zinc-500 cursor-not-allowed'
+              ? 'text-notion-accent hover:bg-notion-hover'
+              : 'text-notion-text-tertiary cursor-not-allowed'
           )}
         >
-          <Send className="w-5 h-5" />
+          <Send className="w-4 h-4" />
         </button>
       </div>
-      <p className="text-center text-xs text-zinc-600 mt-2">
+      <p className="text-center text-notion-xs text-notion-text-tertiary mt-1.5">
         AI 生成内容仅供参考，请结合实际情况判断
       </p>
     </div>

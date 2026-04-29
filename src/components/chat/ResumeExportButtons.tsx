@@ -24,7 +24,6 @@ export default function ResumeExportButtons({ data }: ResumeExportButtonsProps) 
         return
       }
 
-      // 临时移除缩放，恢复原始 A4 尺寸
       const origTransform = wrapper.style.transform
       const origTransformOrigin = wrapper.style.transformOrigin
       const origWidth = wrapper.style.width
@@ -32,7 +31,6 @@ export default function ResumeExportButtons({ data }: ResumeExportButtonsProps) 
       wrapper.style.transformOrigin = 'top left'
       wrapper.style.width = '210mm'
 
-      // 将所有 <img> 预转为 data URL 内联，避免 CORS / 路径问题
       const imgs = Array.from(wrapper.querySelectorAll('img'))
       const origSrcs: string[] = []
       await Promise.all(
@@ -48,7 +46,6 @@ export default function ResumeExportButtons({ data }: ResumeExportButtonsProps) 
             })
             img.src = dataUrl
           } catch {
-            // 图片加载失败时移除，不影响其他内容
             img.remove()
           }
         }),
@@ -60,12 +57,10 @@ export default function ResumeExportButtons({ data }: ResumeExportButtonsProps) 
         backgroundColor: '#ffffff',
       })
 
-      // 恢复图片原始 src
       imgs.forEach((img, i) => {
         if (origSrcs[i]) img.src = origSrcs[i]!
       })
 
-      // 恢复缩放
       wrapper.style.transform = origTransform
       wrapper.style.transformOrigin = origTransformOrigin
       wrapper.style.width = origWidth
@@ -101,7 +96,7 @@ export default function ResumeExportButtons({ data }: ResumeExportButtonsProps) 
     <button
       onClick={() => void handleExportPDF()}
       disabled={exporting}
-      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#4A90D9] text-white text-xs font-medium hover:bg-[#4A90D9]/90 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-notion bg-notion-accent text-notion-bg text-notion-xs font-medium hover:brightness-110 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
     >
       <Download className="w-3.5 h-3.5" />
       {exporting ? '导出中...' : '导出 PDF'}

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react'
 import MessageBubble from './MessageBubble'
 import type { ChatMessage } from '@/types/chat'
-import { MessageSquare } from 'lucide-react'
+import { Sparkles } from 'lucide-react'
 
 interface MessageListProps {
   messages: ChatMessage[]
@@ -21,16 +21,18 @@ export default function MessageList({ messages, isStreaming }: MessageListProps)
     return (
       <div className="flex-1 flex items-center justify-center">
         <div className="text-center">
-          <MessageSquare className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
-          <p className="text-zinc-500 text-lg">开始和小觉对话吧</p>
-          <p className="text-zinc-600 text-sm mt-1">我会帮你探索职业方向、生成简历、模拟面试</p>
+          <div className="w-10 h-10 rounded-notion bg-notion-accent flex items-center justify-center mx-auto mb-4">
+            <Sparkles className="w-5 h-5 text-notion-bg" />
+          </div>
+          <p className="text-notion-text text-notion-sm mb-1">开始和小觉对话吧</p>
+          <p className="text-notion-text-tertiary text-notion-xs">我会帮你探索职业方向、生成简历、模拟面试</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="flex-1 overflow-y-auto py-4">
+    <div className="flex-1 overflow-y-auto py-3">
       <div className="max-w-3xl mx-auto">
         {messages.map((msg, index) => (
           <MessageBubble

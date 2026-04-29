@@ -8,3 +8,8 @@ data/
 *.db-journal
 .DS_Store
 coverage/
+*.py
+*.b64
+*.sh
+*_b64.txt
+cl_b64.txt

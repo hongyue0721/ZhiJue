@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { cn } from '@/lib/utils'
 import type { ChatMessage } from '@/types/chat'
-import { User, Bot } from 'lucide-react'
+import { User, Sparkles } from 'lucide-react'
 
 interface MessageBubbleProps {
   message: ChatMessage
@@ -14,48 +14,46 @@ interface MessageBubbleProps {
 
 export default function MessageBubble({ message, isStreaming }: MessageBubbleProps) {
   const isUser = message.role === 'user'
-
-  // 移除结构化数据块，只显示文本部分
   const displayContent = message.content.replace(/```json:structured[\s\S]*?```/g, '').trim()
 
   return (
     <motion.div
-      className={cn('flex gap-3 px-4 py-3', isUser ? 'justify-end' : 'justify-start')}
-      initial={{ opacity: 0, y: 10 }}
+      className={cn('flex gap-2.5 px-4 py-2.5', isUser ? 'justify-end' : 'justify-start')}
+      initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2 }}
+      transition={{ duration: 0.15 }}
     >
       {!isUser && (
-        <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-zj-blue to-zj-purple flex items-center justify-center flex-shrink-0 mt-1">
-          <Bot className="w-4 h-4 text-white" />
+        <div className="w-7 h-7 rounded-notion bg-notion-accent flex items-center justify-center flex-shrink-0 mt-0.5">
+          <Sparkles className="w-3.5 h-3.5 text-notion-bg" />
         </div>
       )}
 
       <div
         className={cn(
-          'max-w-[80%] rounded-2xl px-4 py-3',
+          'max-w-[80%] rounded-notion-md px-3.5 py-2.5 text-notion-sm',
           isUser
-            ? 'bg-zj-blue/20 border border-zj-blue/30 text-zinc-200'
-            : 'bg-white/5 border border-white/10 text-zinc-200'
+            ? 'bg-notion-surface text-notion-text'
+            : 'text-notion-text'
         )}
       >
         {isUser ? (
-          <p className="text-base leading-relaxed whitespace-pre-wrap">{displayContent}</p>
+          <p className="leading-relaxed whitespace-pre-wrap">{displayContent}</p>
         ) : (
-          <div className="prose prose-invert prose-sm max-w-none [&>p]:leading-relaxed [&>p]:mb-3 [&>ul]:mb-3 [&>ol]:mb-3 [&>h3]:text-zinc-100 [&>h3]:font-semibold">
+          <div className="prose prose-notion max-w-none">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {displayContent}
             </ReactMarkdown>
             {isStreaming && (
-              <span className="inline-block w-2 h-4 bg-zj-blue/60 animate-pulse ml-1" />
+              <span className="inline-block w-1.5 h-3.5 bg-notion-accent/50 animate-pulse ml-0.5" />
             )}
           </div>
         )}
       </div>
 
       {isUser && (
-        <div className="w-8 h-8 rounded-xl bg-zj-sand/20 border border-zj-sand/30 flex items-center justify-center flex-shrink-0 mt-1">
-          <User className="w-4 h-4 text-zj-sand" />
+        <div className="w-7 h-7 rounded-notion bg-notion-hover border border-notion-border flex items-center justify-center flex-shrink-0 mt-0.5">
+          <User className="w-3.5 h-3.5 text-notion-text-secondary" />
         </div>
       )}
     </motion.div>

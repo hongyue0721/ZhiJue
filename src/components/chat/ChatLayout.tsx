@@ -24,11 +24,6 @@ const STAGES: { key: FlowStage; label: string }[] = [
   { key: 'review', label: '复盘总结' },
 ]
 
-/**
- * A4Frame：自适应 A4 预览框
- * - 始终完整显示整页简历，按容器宽高中较小的一维等比缩放
- * - 水平 + 垂直居中，保证单页全貌随时可见
- */
 function A4Frame({ children }: { children: React.ReactNode }) {
   const frameRef = useRef<HTMLDivElement>(null)
   const [frameWidth, setFrameWidth] = useState(0)
@@ -43,10 +38,7 @@ function A4Frame({ children }: { children: React.ReactNode }) {
     return () => ro.disconnect()
   }, [])
 
-  // 原始 A4 宽度 @ 96dpi
-  const A4_W = 210 / 25.4 * 96  // ≈ 793.7px
-
-  // 按宽度等比缩放，不裁高度，内容超出时可滚动
+  const A4_W = 210 / 25.4 * 96
   const scale = frameWidth > 0 ? Math.min(frameWidth / A4_W, 1) : 1
 
   return (
@@ -83,7 +75,6 @@ export default function ChatLayout({ initialSessionId }: { initialSessionId?: st
 
   useEffect(() => {
     if (initialized) return
-
     if (initialSessionId) {
       loadSession(initialSessionId).then(() => setInitialized(true))
     } else if (!state.currentSession) {
@@ -145,61 +136,56 @@ export default function ChatLayout({ initialSessionId }: { initialSessionId?: st
   } : null
 
   return (
-    <div className="h-screen flex flex-col bg-zinc-950">
-      {/* Top bar with back button + stage progress */}
-      <header className="px-4 py-3 border-b border-white/10">
-        <div className="flex items-center gap-3 mb-3">
+    <div className="h-screen flex flex-col bg-notion-bg">
+      <header className="px-4 py-2.5 border-b border-notion-border">
+        <div className="flex items-center gap-2.5 mb-2.5">
           <button
-            className="p-2 text-zinc-400 hover:text-zinc-200 transition-colors"
+            className="p-1.5 text-notion-text-secondary hover:text-notion-text hover:bg-notion-hover rounded-notion transition-colors duration-100"
             onClick={() => router.push('/home')}
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-4 h-4" />
           </button>
-          <h2 className="text-sm font-medium text-zinc-300">求职旅程</h2>
+          <h2 className="text-notion-sm font-medium text-notion-text">求职旅程</h2>
         </div>
 
-        {/* Stage progress bar */}
-        <div className="flex items-center gap-1 overflow-x-auto pb-1">
+        <div className="flex items-center gap-1 overflow-x-auto pb-0.5">
           {STAGES.map((stage, index) => (
             <div key={stage.key} className="flex items-center">
               <div
                 className={cn(
-                  'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all',
+                  'flex items-center gap-1.5 px-2.5 py-1 rounded-notion text-notion-xs font-medium whitespace-nowrap transition-all duration-100',
                   index < currentStageIndex
-                    ? 'bg-[#4A90D9]/20 text-[#4A90D9] border border-[#4A90D9]/30'
+                    ? 'text-notion-accent bg-notion-accent/10'
                     : index === currentStageIndex
-                    ? 'bg-[#C8A87A]/20 text-[#C8A87A] border border-[#C8A87A]/30'
-                    : 'bg-white/5 text-zinc-500 border border-white/5'
+                    ? 'text-notion-text bg-notion-hover'
+                    : 'text-notion-text-tertiary'
                 )}
               >
                 <span className={cn(
-                  'w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold',
+                  'w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold',
                   index < currentStageIndex
-                    ? 'bg-[#4A90D9] text-white'
+                    ? 'bg-notion-accent text-notion-bg'
                     : index === currentStageIndex
-                    ? 'bg-[#C8A87A] text-zinc-900'
-                    : 'bg-white/10 text-zinc-500'
+                    ? 'bg-notion-text text-notion-bg'
+                    : 'bg-notion-hover text-notion-text-tertiary'
                 )}>
                   {index < currentStageIndex ? '\u2713' : index + 1}
                 </span>
                 {stage.label}
               </div>
               {index < STAGES.length - 1 && (
-                <ChevronRight className="w-3.5 h-3.5 text-zinc-600 mx-0.5 flex-shrink-0" />
+                <ChevronRight className="w-3 h-3 text-notion-text-tertiary mx-0.5 flex-shrink-0" />
               )}
             </div>
           ))}
         </div>
       </header>
 
-      {/* Content area */}
       {state.stage === 'basic_info' ? (
         <BasicInfoForm onSubmit={handleBasicInfoSubmit} isLoading={state.isLoading} />
       ) : isResumeStage ? (
-        /* Resume stage: left chat 60% + right resume preview 40% */
         <div className="flex-1 flex min-h-0">
-          {/* Left: chat area */}
-          <div className="flex-[6] flex flex-col min-h-0 border-r border-white/10">
+          <div className="flex-[6] flex flex-col min-h-0 border-r border-notion-border">
             <MessageList messages={state.messages} isStreaming={state.isStreaming} />
             <InputBox
               onSend={sendMessage}
@@ -208,19 +194,18 @@ export default function ChatLayout({ initialSessionId }: { initialSessionId?: st
             />
           </div>
 
-          {/* Right: resume preview + action buttons */}
-          <div className="flex-[4] flex flex-col min-h-0" style={{ background: '#f0f0f0' }}>
+          <div className="flex-[4] flex flex-col min-h-0" style={{ background: '#1a1a1a' }}>
             {resumeWithAvatar ? (
               <>
                 <A4Frame>
                   <ResumePreview data={resumeWithAvatar} />
                 </A4Frame>
 
-                <div className="flex items-center justify-center gap-2 py-3 px-3 flex-wrap flex-shrink-0">
+                <div className="flex items-center justify-center gap-2 py-2.5 px-3 flex-wrap flex-shrink-0 border-t border-notion-border">
                   <button
                     onClick={handleRegenerateResume}
                     disabled={state.isStreaming}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-zinc-300 text-xs font-medium hover:bg-white/10 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-notion text-notion-text-secondary text-notion-xs font-medium hover:bg-notion-hover hover:text-notion-text transition-all duration-100 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <RefreshCw className="w-3.5 h-3.5" />
                     重新生成
@@ -228,7 +213,7 @@ export default function ChatLayout({ initialSessionId }: { initialSessionId?: st
                   <ResumeExportButtons data={resumeWithAvatar} />
                   <button
                     onClick={handleConfirmResume}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#C8A87A] text-zinc-900 text-xs font-medium hover:bg-[#C8A87A]/90 transition-all duration-200"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-notion bg-notion-accent text-notion-bg text-notion-xs font-medium hover:brightness-110 transition-all duration-100"
                   >
                     <CheckCircle className="w-3.5 h-3.5" />
                     确认简历
@@ -236,9 +221,9 @@ export default function ChatLayout({ initialSessionId }: { initialSessionId?: st
                 </div>
               </>
             ) : (
-              <div className="flex items-center justify-center h-full text-zinc-500 text-sm text-center px-4">
+              <div className="flex items-center justify-center h-full text-notion-text-tertiary text-notion-sm text-center px-4">
                 <div>
-                  <p className="text-lg mb-2">📄</p>
+                  <p className="text-notion-lg mb-2">📄</p>
                   <p>与小觉对话收集信息后，简历将在这里实时预览</p>
                 </div>
               </div>
@@ -246,38 +231,37 @@ export default function ChatLayout({ initialSessionId }: { initialSessionId?: st
           </div>
         </div>
       ) : isReviewStage ? (
-        /* Review stage: show interview report */
         <div className="flex-1 overflow-y-auto p-4">
-          <div className="max-w-4xl mx-auto space-y-6">
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center">
-              <p className="text-xs uppercase tracking-[0.28em] text-zinc-500 mb-2">整体评分</p>
-              <p className="text-5xl font-bold text-[#C8A87A]">{state.interviewReport!.overallScore}</p>
+          <div className="max-w-3xl mx-auto space-y-4">
+            <div className="rounded-notion-md border border-notion-border bg-notion-surface p-5 text-center">
+              <p className="text-notion-xs uppercase tracking-[0.2em] text-notion-text-tertiary mb-1 font-medium">整体评分</p>
+              <p className="text-4xl font-bold text-notion-accent">{state.interviewReport!.overallScore}</p>
             </div>
 
             {state.interviewReport!.radar && (
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <p className="text-xs uppercase tracking-[0.28em] text-zinc-500 mb-4">六维能力分析</p>
+              <div className="rounded-notion-md border border-notion-border bg-notion-surface p-5">
+                <p className="text-notion-xs uppercase tracking-[0.2em] text-notion-text-tertiary mb-3 font-medium">六维能力分析</p>
                 <RadarChart data={state.interviewReport!.radar} />
               </div>
             )}
 
             {state.interviewReport!.questionFeedbacks.length > 0 && (
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <p className="text-xs uppercase tracking-[0.28em] text-zinc-500 mb-4">逐题点评</p>
-                <div className="space-y-4">
+              <div className="rounded-notion-md border border-notion-border bg-notion-surface p-5">
+                <p className="text-notion-xs uppercase tracking-[0.2em] text-notion-text-tertiary mb-3 font-medium">逐题点评</p>
+                <div className="space-y-3">
                   {state.interviewReport!.questionFeedbacks.map((qf, idx) => (
-                    <div key={qf.questionId} className="border-b border-white/5 pb-4 last:border-0 last:pb-0">
-                      <div className="flex items-start gap-3">
-                        <span className="w-6 h-6 rounded-full bg-[#4A90D9]/20 text-[#4A90D9] flex items-center justify-center text-xs font-bold flex-shrink-0">
+                    <div key={qf.questionId} className="border-b border-notion-border pb-3 last:border-0 last:pb-0">
+                      <div className="flex items-start gap-2.5">
+                        <span className="w-5 h-5 rounded-full bg-notion-accent/15 text-notion-accent flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">
                           {idx + 1}
                         </span>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm text-zinc-200 font-medium">{qf.question}</p>
-                          <p className="text-xs text-zinc-400 mt-1">你的回答：{qf.answer}</p>
-                          <p className="text-xs text-[#C8A87A] mt-1">评分：{qf.score}/10</p>
-                          <p className="text-xs text-zinc-300 mt-1">{qf.feedback}</p>
+                          <p className="text-notion-sm text-notion-text font-medium">{qf.question}</p>
+                          <p className="text-notion-xs text-notion-text-tertiary mt-1">你的回答：{qf.answer}</p>
+                          <p className="text-notion-xs text-notion-accent mt-1">评分：{qf.score}/10</p>
+                          <p className="text-notion-xs text-notion-text-secondary mt-1">{qf.feedback}</p>
                           {qf.betterAnswer && (
-                            <p className="text-xs text-[#4A90D9] mt-1">参考答案：{qf.betterAnswer}</p>
+                            <p className="text-notion-xs text-notion-blue mt-1">参考答案：{qf.betterAnswer}</p>
                           )}
                         </div>
                       </div>
@@ -289,7 +273,7 @@ export default function ChatLayout({ initialSessionId }: { initialSessionId?: st
 
             <InterviewReport report={state.interviewReport!} />
 
-            <div className="border-t border-white/10 pt-4">
+            <div className="border-t border-notion-border pt-3">
               <MessageList messages={state.messages} isStreaming={state.isStreaming} />
             </div>
 
@@ -301,7 +285,6 @@ export default function ChatLayout({ initialSessionId }: { initialSessionId?: st
           </div>
         </div>
       ) : (
-        /* Default: chat view (explore, interview) */
         <>
           <MessageList messages={state.messages} isStreaming={state.isStreaming} />
           <InputBox
