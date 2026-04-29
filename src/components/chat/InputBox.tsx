@@ -5,7 +5,7 @@ import { Send } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface InputBoxProps {
-  onSend: (content: string) => void
+  onSend: (content: string) => void | Promise<void>
   disabled?: boolean
   placeholder?: string
 }
@@ -21,17 +21,17 @@ export default function InputBox({ onSend, disabled, placeholder }: InputBoxProp
     }
   }, [input])
 
-  const handleSend = () => {
+  const handleSend = async () => {
     const trimmed = input.trim()
     if (!trimmed || disabled) return
-    onSend(trimmed)
+    await onSend(trimmed)
     setInput('')
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
-      handleSend()
+      void handleSend()
     }
   }
 
@@ -49,7 +49,7 @@ export default function InputBox({ onSend, disabled, placeholder }: InputBoxProp
           className="flex-1 bg-transparent text-zinc-200 placeholder-zinc-500 resize-none focus:outline-none text-base leading-relaxed max-h-[200px]"
         />
         <button
-          onClick={handleSend}
+          onClick={() => void handleSend()}
           disabled={disabled || !input.trim()}
           className={cn(
             'p-2 rounded-xl transition-all duration-200',

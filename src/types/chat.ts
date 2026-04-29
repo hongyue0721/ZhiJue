@@ -1,4 +1,7 @@
-/** 对话模式 */
+/** 流程阶段 */
+export type FlowStage = 'basic_info' | 'explore' | 'resume' | 'interview' | 'review'
+
+/** 兼容旧版模式切换组件 */
 export type ChatMode = 'explore' | 'resume' | 'interview'
 
 /** 消息角色 */
@@ -10,9 +13,8 @@ export interface ChatMessage {
   sessionId: string
   role: MessageRole
   content: string
-  mode: ChatMode
+  mode: string // stage name
   createdAt: string
-  /** 附带的结构化数据（职业画像、推荐岗位、简历JSON、雷达图等） */
   structuredData?: Record<string, unknown>
 }
 
@@ -20,22 +22,49 @@ export interface ChatMessage {
 export interface ChatSession {
   id: string
   title: string
-  mode: ChatMode
+  mode: string
+  stage: FlowStage
   createdAt: string
   updatedAt: string
-  /** 用户基础信息是否已填写 */
   basicInfoCompleted: boolean
+  basicInfo?: string
+  careerProfile?: string
+  recommendations?: string
+  resumeData?: string
+  interviewReport?: string
 }
 
 /** 用户基础信息（强制收集） */
 export interface BasicInfo {
   name: string
-  education: string       // 学历：高中/大专/本科/硕士/博士
-  major: string           // 专业
-  graduationYear: string  // 毕业年份
+  phone: string
+  email?: string
+  school: string
+  major: string
+  grade: string           // 年级：大一/大二/大三/大四/研一/研二/研三
+  jobTarget: string       // 求职目标
   workExperience: string  // 工作经验：无/1年以下/1-3年/3-5年/5年以上
-  targetCity?: string     // 目标城市
-  interests?: string      // 兴趣方向
+  targetCity?: string
+  interests?: string
+  avatar?: string         // 头像 URL
+}
+
+export interface CareerProfileStructured {
+  profile: {
+    summary: string
+    strengths: string[]
+    growthAreas: string[]
+    personalityTraits: string[]
+    careerDirection: string
+  }
+  recommendations: Array<{
+    title: string
+    company: string
+    matchScore: number
+    reason: string
+    salaryRange: string
+    requirements: string[]
+  }>
 }
 
 /** SSE 事件类型 */

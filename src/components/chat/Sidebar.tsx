@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, Trash2, MessageSquare, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useChat } from '@/contexts/ChatContext'
-import ModeBadge from './ModeBadge'
 
 export default function Sidebar() {
   const { state, loadSessions, createSession, loadSession, deleteSession, dispatch } = useChat()
@@ -40,7 +39,7 @@ export default function Sidebar() {
         {/* Header */}
         <div className="p-4 flex items-center justify-between border-b border-white/10">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-zj-blue to-zj-purple flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#4A90D9] to-[#7B61FF] flex items-center justify-center">
               <span className="text-sm font-bold text-white">觉</span>
             </div>
             <span className="font-semibold text-zinc-100">职觉</span>
@@ -56,7 +55,7 @@ export default function Sidebar() {
         {/* New chat button */}
         <div className="p-3">
           <button
-            onClick={() => createSession('explore')}
+            onClick={() => createSession()}
             className="w-full flex items-center gap-2 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-zinc-300 hover:bg-white/10 transition-all duration-200"
           >
             <Plus className="w-4 h-4" />

@@ -16,3 +16,15 @@ export interface JobRecommendation {
   salaryRange: string       // 薪资范围
   requirements: string[]    // 核心要求
 }
+
+/** 兼容旧版侧边栏数据结构 */
+export interface Profile {
+  strengths: string[]
+  values: string[]
+  work_style: string
+  recommendations: Array<{
+    job: string
+    match: string
+    why: string
+  }>
+}

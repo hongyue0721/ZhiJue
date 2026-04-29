@@ -3,7 +3,8 @@
 # ============================================
 
 # Stage 1: Dependencies
-FROM node:20-alpine AS deps
+ARG NODE_IMAGE=mirror.ccs.tencentyun.com/library/node:20-alpine
+FROM ${NODE_IMAGE} AS deps
 RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 
@@ -11,7 +12,7 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
 # Stage 2: Build
-FROM node:20-alpine AS builder
+FROM ${NODE_IMAGE} AS builder
 RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 
@@ -25,7 +26,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN pnpm build
 
 # Stage 3: Production
-FROM node:20-alpine AS runner
+FROM ${NODE_IMAGE} AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production

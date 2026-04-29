@@ -17,6 +17,12 @@ export function getResumeSystemPrompt(basicInfo?: BasicInfo, profile?: CareerPro
 3. 帮用户优化每段经历的描述，突出成果和数据
 4. 最终输出完整的结构化简历 JSON
 
+## 重要规则
+- 用户基础信息已在表单中填写，直接使用，不要重复询问姓名、电话、邮箱、学校、专业等
+- 每次对话只收集一个模块的信息（如：先问教育经历详情，再问项目经历）
+- 每收集完一个模块，告诉用户该模块已记录，然后进入下一个模块
+- 所有模块收集完毕后，输出完整的结构化简历 JSON
+
 ## 输出格式要求
 当简历信息收集完毕时，在回复末尾附加：
 
@@ -64,14 +70,25 @@ export function getResumeSystemPrompt(basicInfo?: BasicInfo, profile?: CareerPro
 \`\`\``
 
   if (basicInfo) {
-    prompt += `\n\n## 用户基础信息
+    prompt += `\n\n## 用户基础信息（已填写，直接使用，不要重复询问）
 - 姓名：${basicInfo.name}
-- 学历：${basicInfo.education}
+- 联系电话：${basicInfo.phone}
+${basicInfo.email ? `- 邮箱：${basicInfo.email}` : ''}
+- 学校：${basicInfo.school}
 - 专业：${basicInfo.major}
-- 毕业年份：${basicInfo.graduationYear}
+- 年级：${basicInfo.grade}
+- 求职目标：${basicInfo.jobTarget}
 - 工作经验：${basicInfo.workExperience}
 ${basicInfo.targetCity ? `- 目标城市：${basicInfo.targetCity}` : ''}
-${basicInfo.interests ? `- 兴趣方向：${basicInfo.interests}` : ''}`
+${basicInfo.interests ? `- 兴趣方向：${basicInfo.interests}` : ''}
+
+以上信息已由用户填写，直接用于简历的 basicInfo 模块，不要重复询问。
+请直接开始收集以下缺失模块的信息（每次只问一个模块）：
+1. 教育经历详情（GPA、在校亮点、起止时间）
+2. 实习/工作经历（公司、职位、时间、描述、成果）
+3. 项目经历（项目名、角色、时间、描述、技术栈、亮点）
+4. 专业技能列表
+5. 自我评价`
   }
 
   if (profile) {

@@ -39,6 +39,15 @@ export interface RadarData {
   scores: number[]        // 对应分数 0-100
 }
 
+/** 兼容旧版五维/对象式雷达图 */
+export interface InterviewRadar {
+  expression: number
+  logic: number
+  professional: number
+  adaptability: number
+  self_awareness: number
+}
+
 /** 逐题点评 */
 export interface QuestionFeedback {
   questionId: string

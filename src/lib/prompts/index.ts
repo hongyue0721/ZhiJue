@@ -1,14 +1,13 @@
 import type { BasicInfo } from '@/types/chat'
-import type { ChatMode } from '@/types/chat'
 import type { CareerProfile } from '@/types/profile'
 import type { ResumeData } from '@/types/resume'
 import { getExploreSystemPrompt } from './explore'
 import { getResumeSystemPrompt } from './resume'
 import { getInterviewSystemPrompt } from './interview'
 
-/** 根据模式获取系统提示词 */
+/** 根据阶段获取系统提示词 */
 export function getSystemPrompt(
-  mode: ChatMode,
+  mode: string,
   context?: {
     basicInfo?: BasicInfo
     profile?: CareerProfile

@@ -51,9 +51,10 @@ export function getExploreSystemPrompt(basicInfo?: BasicInfo): string {
 
 ## 用户基础信息
 - 姓名：${basicInfo.name}
-- 学历：${basicInfo.education}
+- 学校：${basicInfo.school}
 - 专业：${basicInfo.major}
-- 毕业年份：${basicInfo.graduationYear}
+- 年级：${basicInfo.grade}
+- 求职目标：${basicInfo.jobTarget}
 - 工作经验：${basicInfo.workExperience}
 ${basicInfo.targetCity ? `- 目标城市：${basicInfo.targetCity}` : ''}
 ${basicInfo.interests ? `- 兴趣方向：${basicInfo.interests}` : ''}

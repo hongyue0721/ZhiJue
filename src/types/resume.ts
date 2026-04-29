@@ -18,6 +18,7 @@ export interface ResumeBasicInfo {
   email?: string
   location?: string
   title?: string          // 求职意向
+  avatar?: string         // 头像 URL
 }
 
 export interface ResumeEducation {
@@ -47,4 +48,9 @@ export interface ResumeProject {
   description: string
   highlights: string[]
   techStack?: string[]
+}
+
+/** 兼容旧版 Markdown 简历预览 */
+export interface ResumeDocument {
+  markdown: string
 }
