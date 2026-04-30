@@ -1,6 +1,6 @@
 # 职觉 ZhiJue · TASKS 任务记录
 
-> 最后更新：2026-04-29 23:30
+> 最后更新：2026-04-30 00:30
 > 说明：本文件记录每次工作范围、完成结果、自测结论、接口变更和后续建议，作为跨会话续接依据。
 
 ## 已完成工作记录
@@ -17,6 +17,26 @@
 - 📦 commit：未提交
 
 ## 已完成工作记录
+
+### 2026-04-30 · Notion 浅色米黄配色全站改造
+- ✅ 完成：
+  - 全站改为 Notion 浅色米黄风格：背景 `#FFFCF7`、卡片 `#FFFFFF`、强调色 `#D4A853`、文字 `#37352F`
+  - `tailwind.config.ts`：色彩 token 全面改为 Notion 浅色（notion-bg/surface/hover/border/text/accent）
+  - `globals.css`：CSS 变量、滚动条、选中色、prose-notion Markdown 排版样式
+  - `layout.tsx`：Toaster 浅色样式
+  - `home/page.tsx`：首页 Hero + 历史记录浅色适配
+  - `MessageBubble.tsx`：用户气泡深色文字白字、AI 气泡白色卡片 + 边框
+  - `MessageList.tsx`：空状态浅色适配
+  - `InputBox.tsx`：白色输入框 + 浅阴影
+  - `BasicInfoForm.tsx`：浅色表单
+  - `ChatLayout.tsx`：进度条、简历区背景 `#F5F0E8`、操作按钮浅色适配
+  - `ResumeExportButtons.tsx`：深色文字白字按钮
+  - `InterviewReport.tsx`：浅色卡片 + 暖金评分
+  - `RadarChart.tsx`：暖金配色
+  - 服务器 build + PM2 restart + 验证通过
+  - 推送到 GitHub `hongyue0721/ZhiJue`
+- 🔧 接口变更：本次无接口变更
+- 📦 commit：`feat: Notion 浅色米黄配色全站改造`
 
 ### 2026-04-29 · 简历阶段布局优化 + PDF 照片修复 + A4Frame 自适应
 - ✅ 完成：

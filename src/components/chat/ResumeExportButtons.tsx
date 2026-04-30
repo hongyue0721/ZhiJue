@@ -96,7 +96,7 @@ export default function ResumeExportButtons({ data }: ResumeExportButtonsProps) 
     <button
       onClick={() => void handleExportPDF()}
       disabled={exporting}
-      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-notion bg-notion-accent text-notion-bg text-notion-xs font-medium hover:brightness-110 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-notion bg-notion-text text-white text-notion-xs font-medium hover:bg-notion-text/90 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
     >
       <Download className="w-3.5 h-3.5" />
       {exporting ? '导出中...' : '导出 PDF'}

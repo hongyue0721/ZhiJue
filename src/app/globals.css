@@ -4,16 +4,16 @@
 
 @layer base {
   :root {
-    --background: 25 25 25;
-    --foreground: 235 235 235;
-    --surface: 32 32 32;
-    --surface-hover: 42 42 42;
-    --border: 255 255 255 / 0.06;
-    --text-primary: 235 235 235;
-    --text-secondary: 155 155 155;
-    --text-tertiary: 107 107 107;
-    --accent: 232 201 154;
-    --accent-hover: 240 215 175;
+    --background: 255 252 247;
+    --foreground: 55 53 47;
+    --surface: 255 255 255;
+    --surface-hover: 245 240 232;
+    --border: 15 15 15 / 0.06;
+    --text-primary: 55 53 47;
+    --text-secondary: 120 119 116;
+    --text-tertiary: 180 180 176;
+    --accent: 212 168 83;
+    --accent-hover: 200 155 70;
   }
 
   body {
@@ -32,15 +32,15 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(15, 15, 15, 0.08);
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(15, 15, 15, 0.16);
   }
 
   ::selection {
-    background: rgba(232, 201, 154, 0.25);
+    background: rgba(212, 168, 83, 0.25);
   }
 }
 
@@ -52,13 +52,13 @@
     @apply px-3 py-1.5 rounded-notion font-medium text-notion-sm transition-all duration-150 ease-out;
   }
   .zj-button-primary {
-    @apply zj-button bg-notion-accent text-notion-bg hover:brightness-110;
+    @apply zj-button bg-notion-text text-white hover:bg-notion-text/90;
   }
   .zj-button-secondary {
     @apply zj-button bg-transparent text-notion-text-secondary border border-notion-border hover:bg-notion-hover hover:text-notion-text;
   }
   .zj-input {
-    @apply w-full px-3 py-2 bg-transparent border border-notion-border rounded-notion text-notion-text placeholder-notion-text-tertiary focus:outline-none focus:border-notion-text-secondary transition-colors duration-150;
+    @apply w-full px-3 py-2 bg-white border border-notion-border rounded-notion text-notion-text placeholder-notion-text-tertiary focus:outline-none focus:border-notion-border-focus transition-colors duration-150;
   }
 
   .prose-notion {

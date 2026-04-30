@@ -9,17 +9,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        'notion-bg': '#191919',
-        'notion-surface': '#202020',
-        'notion-hover': '#2a2a2a',
-        'notion-border': 'rgba(255,255,255,0.06)',
-        'notion-text': '#EBEBEB',
-        'notion-text-secondary': '#9B9B9B',
-        'notion-text-tertiary': '#6B6B6B',
-        'notion-accent': '#E8C99A',
-        'notion-blue': '#529CCA',
+        'notion-bg': '#FFFCF7',
+        'notion-surface': '#FFFFFF',
+        'notion-hover': '#F5F0E8',
+        'notion-border': 'rgba(15, 15, 15, 0.06)',
+        'notion-border-focus': 'rgba(15, 15, 15, 0.16)',
+        'notion-text': '#37352F',
+        'notion-text-secondary': '#787774',
+        'notion-text-tertiary': '#B4B4B0',
+        'notion-accent': '#D4A853',
+        'notion-blue': '#2EAADC',
         'notion-red': '#E06C75',
-        'notion-green': '#98C379',
+        'notion-green': '#4DAB9A',
       },
       fontFamily: {
         sans: [
@@ -31,12 +32,6 @@ const config: Config = {
           '"PingFang SC"',
           '"Microsoft YaHei"',
           'sans-serif',
-        ],
-        serif: [
-          'Georgia',
-          '"Noto Serif SC"',
-          '"Songti SC"',
-          'serif',
         ],
       },
       fontSize: {
@@ -54,8 +49,8 @@ const config: Config = {
         'notion-lg': '8px',
       },
       boxShadow: {
-        'notion': '0 1px 3px rgba(0,0,0,0.3)',
-        'notion-lg': '0 4px 12px rgba(0,0,0,0.4)',
+        'notion': '0 1px 3px rgba(0,0,0,0.06)',
+        'notion-lg': '0 4px 12px rgba(0,0,0,0.08)',
       },
       animation: {
         'fade-in': 'fadeIn 0.2s ease-out',

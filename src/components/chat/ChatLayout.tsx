@@ -164,9 +164,9 @@ export default function ChatLayout({ initialSessionId }: { initialSessionId?: st
                 <span className={cn(
                   'w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold',
                   index < currentStageIndex
-                    ? 'bg-notion-accent text-notion-bg'
+                    ? 'bg-notion-accent text-white'
                     : index === currentStageIndex
-                    ? 'bg-notion-text text-notion-bg'
+                    ? 'bg-notion-text text-white'
                     : 'bg-notion-hover text-notion-text-tertiary'
                 )}>
                   {index < currentStageIndex ? '\u2713' : index + 1}
@@ -194,7 +194,7 @@ export default function ChatLayout({ initialSessionId }: { initialSessionId?: st
             />
           </div>
 
-          <div className="flex-[4] flex flex-col min-h-0" style={{ background: '#1a1a1a' }}>
+          <div className="flex-[4] flex flex-col min-h-0" style={{ background: '#F5F0E8' }}>
             {resumeWithAvatar ? (
               <>
                 <A4Frame>
@@ -213,7 +213,7 @@ export default function ChatLayout({ initialSessionId }: { initialSessionId?: st
                   <ResumeExportButtons data={resumeWithAvatar} />
                   <button
                     onClick={handleConfirmResume}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-notion bg-notion-accent text-notion-bg text-notion-xs font-medium hover:brightness-110 transition-all duration-100"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-notion bg-notion-text text-white text-notion-xs font-medium hover:bg-notion-text/90 transition-all duration-100"
                   >
                     <CheckCircle className="w-3.5 h-3.5" />
                     确认简历

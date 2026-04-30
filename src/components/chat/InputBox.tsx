@@ -37,7 +37,7 @@ export default function InputBox({ onSend, disabled, placeholder }: InputBoxProp
 
   return (
     <div className="px-4 pb-3 pt-2">
-      <div className="max-w-3xl mx-auto flex items-end gap-2 bg-notion-surface border border-notion-border rounded-notion-md px-3 py-2.5">
+      <div className="max-w-3xl mx-auto flex items-end gap-2 bg-notion-surface border border-notion-border rounded-notion-md px-3 py-2.5 shadow-notion">
         <textarea
           ref={textareaRef}
           value={input}

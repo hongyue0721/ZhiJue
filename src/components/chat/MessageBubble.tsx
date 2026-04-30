@@ -25,7 +25,7 @@ export default function MessageBubble({ message, isStreaming }: MessageBubblePro
     >
       {!isUser && (
         <div className="w-7 h-7 rounded-notion bg-notion-accent flex items-center justify-center flex-shrink-0 mt-0.5">
-          <Sparkles className="w-3.5 h-3.5 text-notion-bg" />
+          <Sparkles className="w-3.5 h-3.5 text-white" />
         </div>
       )}
 
@@ -33,14 +33,14 @@ export default function MessageBubble({ message, isStreaming }: MessageBubblePro
         className={cn(
           'max-w-[80%] rounded-notion-md px-3.5 py-2.5 text-notion-sm',
           isUser
-            ? 'bg-notion-surface text-notion-text'
-            : 'text-notion-text'
+            ? 'bg-notion-text text-white'
+            : 'bg-notion-surface border border-notion-border'
         )}
       >
         {isUser ? (
           <p className="leading-relaxed whitespace-pre-wrap">{displayContent}</p>
         ) : (
-          <div className="prose prose-notion max-w-none">
+          <div className="prose-notion">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {displayContent}
             </ReactMarkdown>
