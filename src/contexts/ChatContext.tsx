@@ -1,27 +1,10 @@
 'use client'
 
-import { createContext, useContext, useReducer, useCallback, type ReactNode } from 'react'
-import type { ChatMessage, ChatSession, FlowStage, BasicInfo, CareerProfileStructured } from '@/types/chat'
+import { createContext, useContext, useReducer, type ReactNode } from 'react'
+import type { ChatMessage, ChatSession, FlowStage, BasicInfo } from '@/types/chat'
 import type { CareerProfile, JobRecommendation } from '@/types/profile'
 import type { ResumeData } from '@/types/resume'
 import type { InterviewReport } from '@/types/interview'
-
-/** 生成 UUID（兼容非 HTTPS 环境，crypto.randomUUID 仅在安全上下文可用） */
-function generateLocalId(): string {
-  try {
-    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-      return crypto.randomUUID()
-    }
-  } catch {
-    // ignore
-  }
-  const bytes = new Uint8Array(16)
-  crypto.getRandomValues(bytes)
-  bytes[6] = (bytes[6]! & 0x0f) | 0x40
-  bytes[8] = (bytes[8]! & 0x3f) | 0x80
-  const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('')
-  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`
-}
 
 interface ChatState {
   sessions: ChatSession[]
@@ -133,6 +116,22 @@ const STAGE_LABELS: Record<FlowStage, string> = {
   review: '复盘总结',
 }
 
+function generateLocalId(): string {
+  try {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+      return crypto.randomUUID()
+    }
+  } catch {
+    // ignore
+  }
+  const bytes = new Uint8Array(16)
+  crypto.getRandomValues(bytes)
+  bytes[6] = (bytes[6]! & 0x0f) | 0x40
+  bytes[8] = (bytes[8]! & 0x3f) | 0x80
+  const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('')
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`
+}
+
 interface ChatContextValue {
   state: ChatState
   dispatch: React.Dispatch<ChatAction>
@@ -154,7 +153,7 @@ const ChatContext = createContext<ChatContextValue | null>(null)
 export function ChatProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(chatReducer, initialState)
 
-  const loadSessions = useCallback(async () => {
+  const loadSessions = async () => {
     try {
       const res = await fetch('/api/sessions')
       const json = await res.json()
@@ -162,9 +161,9 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     } catch (err) {
       console.error('[ChatContext] 加载会话列表失败:', err)
     }
-  }, [])
+  }
 
-  const createSession = useCallback(async (): Promise<ChatSession | null> => {
+  const createSession = async (): Promise<ChatSession | null> => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true })
       const res = await fetch('/api/sessions', {
@@ -193,9 +192,9 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false })
     }
-  }, [loadSessions])
+  }
 
-  const loadSession = useCallback(async (id: string) => {
+  const loadSession = async (id: string) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true })
       const res = await fetch(`/api/sessions/${id}`)
@@ -225,9 +224,9 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false })
     }
-  }, [])
+  }
 
-  const deleteSession = useCallback(async (id: string) => {
+  const deleteSession = async (id: string) => {
     try {
       await fetch(`/api/sessions/${id}`, { method: 'DELETE' })
       if (state.currentSession?.id === id) {
@@ -238,9 +237,9 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     } catch (err) {
       console.error('[ChatContext] 删除会话失败:', err)
     }
-  }, [state.currentSession, loadSessions])
+  }
 
-  const submitBasicInfo = useCallback(async (sessionId: string, info: BasicInfo): Promise<boolean> => {
+  const submitBasicInfo = async (sessionId: string, info: BasicInfo): Promise<boolean> => {
     try {
       const res = await fetch(`/api/sessions/${sessionId}/basic-info`, {
         method: 'POST',
@@ -265,21 +264,18 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       console.error('[ChatContext] 提交基础信息失败:', err)
       return false
     }
-  }, [])
+  }
 
-  const advanceStage = useCallback(() => {
+  const advanceStage = () => {
     const currentIdx = STAGE_ORDER.indexOf(state.stage)
     if (currentIdx < STAGE_ORDER.length - 1) {
       const nextStage = STAGE_ORDER[currentIdx + 1]!
       dispatch({ type: 'SET_STAGE', payload: nextStage })
     }
-  }, [state.stage])
+  }
 
-  const sendMessage = useCallback(async (content: string) => {
-      if (!state.currentSession || state.isStreaming) {
-      console.warn('[ChatContext] sendMessage 被阻止:', { hasSession: !!state.currentSession, isStreaming: state.isStreaming })
-      return
-    }
+  const sendMessage = async (content: string) => {
+    if (!state.currentSession || state.isStreaming) return
 
     const userMsg: ChatMessage = {
       id: generateLocalId(),
@@ -349,7 +345,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
 
             if (eventName === 'structured') {
               if (eventData.type === 'career_profile') {
-                const structured = eventData.data as CareerProfileStructured
+                const structured = eventData.data
                 dispatch({ type: 'SET_CAREER_PROFILE', payload: structured.profile })
                 dispatch({ type: 'SET_RECOMMENDATIONS', payload: structured.recommendations })
                 dispatch({ type: 'SET_STAGE', payload: 'resume' })
@@ -361,7 +357,6 @@ export function ChatProvider({ children }: { children: ReactNode }) {
                     stage: 'resume',
                   },
                 })
-                // 用已有 basicInfo 创建骨架简历，立即渲染预览区
                 if (state.basicInfo) {
                   const now = new Date().toISOString()
                   const skeleton: ResumeData = {
@@ -398,9 +393,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
                 dispatch({ type: 'SET_RESUME_DATA', payload: resume })
                 dispatch({
                   type: 'MERGE_CURRENT_SESSION',
-                  payload: {
-                    resumeData: JSON.stringify(resume),
-                  },
+                  payload: { resumeData: JSON.stringify(resume) },
                 })
               }
 
@@ -438,23 +431,23 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     } finally {
       dispatch({ type: 'SET_STREAMING', payload: false })
     }
-  }, [state.currentSession, state.stage, state.isStreaming])
+  }
 
-  const stageLabel = useCallback((stage: FlowStage) => STAGE_LABELS[stage], [])
-  const stageIndex = useCallback((stage: FlowStage) => STAGE_ORDER.indexOf(stage), [])
+  const stageLabel = (stage: FlowStage) => STAGE_LABELS[stage]
+  const stageIndex = (stage: FlowStage) => STAGE_ORDER.indexOf(stage)
 
-  const confirmResumeAndAdvance = useCallback(() => {
+  const confirmResumeAndAdvance = () => {
     dispatch({ type: 'SET_STAGE', payload: 'interview' })
     dispatch({ type: 'MERGE_CURRENT_SESSION', payload: { stage: 'interview' } })
-  }, [])
+  }
 
-  const regenerateResume = useCallback(async () => {
+  const regenerateResume = async () => {
     if (!state.currentSession || state.isStreaming) return
     dispatch({ type: 'SET_RESUME_DATA', payload: null })
     dispatch({ type: 'MERGE_CURRENT_SESSION', payload: { resumeData: undefined } })
     const message = '请根据我的职业画像和基础信息重新生成一份简历，之前的内容可以忽略，重新帮我整理。'
     await sendMessage(message)
-  }, [state.currentSession, state.isStreaming, sendMessage])
+  }
 
   return (
     <ChatContext.Provider
